@@ -5,18 +5,29 @@ void main() => runApp(const MyApp());
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  static const String _title = 'Flutter Code Sample';
+  static const String _title = 'Post your question';
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: _title,
       home: Scaffold(
-        appBar: AppBar(title: const Text(_title)),
-        body: const Center(
-          child: MyStatefulWidget(),
-        ),
-      ),
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+              onPressed: () {},
+            ),
+            title: const Text(_title, style: TextStyle(color: Colors.black)),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+          body: Theme(
+            data: ThemeData(
+                colorScheme: ColorScheme.light(primary: Colors.green.shade200)),
+            child: const Center(
+              child: MyStatefulWidget(),
+            ),
+          )),
     );
   }
 }
@@ -41,7 +52,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         type: StepperType.horizontal,
         steps: getSteps(),
         currentStep: _index,
-        
 
         // when continue button is tapped
         onStepContinue: () {
@@ -66,7 +76,33 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               : setState(() {
                   _index -= 1;
                 });
-        });
+        },
+        
+
+        controlsBuilder: (BuildContext context, ControlsDetails details){
+            final isLastStep = _index == getSteps().length - 1;   // to get the last step in stepper
+          return Row(
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: details.onStepContinue, 
+                  child: Text(isLastStep? 'Submit' : 'Next')
+                )
+              ),
+
+              const SizedBox(width: 12), 
+
+              if(_index != 0)
+              Expanded(
+                child:ElevatedButton(
+                    onPressed: details.onStepCancel,
+                    child: const Text("Back")
+                )
+              ),
+            ],
+          );
+        }
+    );
   }
 
   List<Step> getSteps() => [
@@ -80,28 +116,34 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               TextFormField(
                 controller: title,
                 keyboardType: TextInputType.multiline,
-                maxLines: 1,
+                minLines: 1,
+                maxLines: 2,
                 decoration: const InputDecoration(
                   labelText: 'Title',
                   hintText: 'Give your question a short title',
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                    Radius.circular(15),
+                  )),
                 ),
               ),
 
-              const SizedBox(height: 15),
+              const SizedBox(height: 50),
 
               TextFormField(
                 controller: description,
                 keyboardType: TextInputType.multiline,
-                maxLines: 4,
+                minLines: 5,
+                maxLines: 5,
                 decoration: const InputDecoration(
                   labelText: 'Description',
                   hintText: 'Tell us more about your question',
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15))),
                 ),
               ),
+
+              const SizedBox(height: 60), 
 
               // const Text('Photo'),
 
