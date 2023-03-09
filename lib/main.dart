@@ -44,7 +44,25 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   final title = TextEditingController();
   final description = TextEditingController();
   var questionLevels = ['PT3', 'SPM', 'UEC', 'IGSCE'];
-  String selectedLevel = 'PT3';
+  var questionSubject = [
+    'Bahasa Melayu',
+    'English',
+    'Sejarah',
+    'Mathematics',
+    'Biology',
+    'Physics',
+    'Chemistry',
+    'Additional Mathematics'
+  ];
+  var questionPreference = [
+    'Peer discussion',
+    'Tutor discussion',
+    'Tutor video explanation',
+  ];
+
+  String? selectedLevel;
+  String? selectedSubject;
+  String? selectedPreference;
 
   @override
   Widget build(BuildContext context) {
@@ -77,32 +95,29 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   _index -= 1;
                 });
         },
-        
-
-        controlsBuilder: (BuildContext context, ControlsDetails details){
-            final isLastStep = _index == getSteps().length - 1;   // to get the last step in stepper
+        controlsBuilder: (BuildContext context, ControlsDetails details) {
+          final isLastStep = _index ==
+              getSteps().length - 1; // to get the last step in stepper
           return Row(
             children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: details.onStepContinue, 
-                  child: Text(isLastStep? 'Submit' : 'Next')
-                )
-              ),
+              if (_index != 0)
+                Expanded(
+                    child: ElevatedButton(
+                        onPressed: details.onStepCancel,
+                        child: const Text("Back")
+                    )
+                ),
 
-              const SizedBox(width: 12), 
+              const SizedBox(width: 12),
 
-              if(_index != 0)
-              Expanded(
-                child:ElevatedButton(
-                    onPressed: details.onStepCancel,
-                    child: const Text("Back")
-                )
-              ),
+                Expanded(
+                    child: ElevatedButton(
+                        onPressed: details.onStepContinue,
+                        child: Text(isLastStep ? 'Submit' : 'Next'))
+                ),
             ],
           );
-        }
-    );
+        });
   }
 
   List<Step> getSteps() => [
@@ -110,9 +125,12 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           state: _index > 0 ? StepState.complete : StepState.indexed,
           isActive: _index >=
               0, //to check if our current step is active (step is coloured)
+
           title: const Text('description'),
           content: Column(
             children: <Widget>[
+              const SizedBox(height: 20),
+
               TextFormField(
                 controller: title,
                 keyboardType: TextInputType.multiline,
@@ -120,6 +138,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 maxLines: 2,
                 decoration: const InputDecoration(
                   labelText: 'Title',
+                  floatingLabelBehavior: FloatingLabelBehavior
+                      .always, // text label is always floated above the text form
                   hintText: 'Give your question a short title',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
@@ -128,7 +148,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 ),
               ),
 
-              const SizedBox(height: 50),
+              const SizedBox(height: 70),
 
               TextFormField(
                 controller: description,
@@ -137,13 +157,14 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 maxLines: 5,
                 decoration: const InputDecoration(
                   labelText: 'Description',
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
                   hintText: 'Tell us more about your question',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(15))),
                 ),
               ),
 
-              const SizedBox(height: 60), 
+              const SizedBox(height: 50),
 
               // const Text('Photo'),
 
@@ -161,11 +182,18 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           title: const Text('category'),
           content: Column(
             children: <Widget>[
+              const SizedBox(height: 20),
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey, width: 1),
-                )),
+                  labelText: 'Question Level',
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  hintText: 'Choose the level of your question',
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 1),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      )),
+                ),
                 // initial value
                 value: selectedLevel,
 
@@ -181,16 +209,76 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 }).toList(),
 
                 onChanged: (String? newLevel) => setState(() {
-                  selectedLevel = newLevel!;
+                  selectedLevel = newLevel ?? '';
                 }),
               ),
+              const SizedBox(height: 70),
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(
+                  labelText: 'Subject',
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  hintText: 'Choose the subject of your question',
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey, width: 1),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(15),
+                    ),
+                  ),
+                ),
+
+                // initial value of the dropdown
+                value: selectedSubject,
+
+                icon: const Icon(Icons.keyboard_arrow_down),
+                menuMaxHeight: 200.0,   // use to limit the number of menu item shown
+
+                // list of items
+                items: questionSubject.map((String subject) {
+                  return DropdownMenuItem(
+                    value: subject,
+                    child: Text(subject),
+                  );
+                }).toList(),
+
+                onChanged: (String? newSubject) => setState(() {
+                  selectedSubject = newSubject ?? '';
+                }),
+              ),
+              const SizedBox(height: 260),
             ],
           ),
         ),
         Step(
           isActive: _index >= 2,
           title: const Text('preference'),
-          content: Container(),
+          content: Column(children: <Widget>[
+            const SizedBox(height: 20),
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(
+                labelText: 'Method Preference(s)',
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                hintText: 'Choose the question solving method(s)',
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey, width: 1),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(15),
+                  ),
+                ),
+              ),
+              value: selectedPreference,
+              icon: const Icon(Icons.keyboard_arrow_down),
+              items: questionPreference.map((String preference) {
+                return DropdownMenuItem(
+                  value: preference,
+                  child: Text(preference),
+                );
+              }).toList(),
+              onChanged: (String? newPreference) => setState(() {
+                selectedPreference = newPreference ?? '';
+              }),
+            ),
+            const SizedBox(height: 394),
+          ]),
         ),
       ];
 }
