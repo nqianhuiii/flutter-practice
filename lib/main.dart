@@ -1,6 +1,16 @@
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:dotted_border/dotted_border.dart';
+import 'package:image_picker/image_picker.dart';
 
-void main() => runApp(const MyApp());
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -41,8 +51,10 @@ class MyStatefulWidget extends StatefulWidget {
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _index = 0;
-  final title = TextEditingController();
-  final description = TextEditingController();
+
+  final _title = TextEditingController();
+  final _description = TextEditingController();
+
   var questionLevels = ['PT3', 'SPM', 'UEC', 'IGSCE'];
   var questionSubject = [
     'Bahasa Melayu',
@@ -63,6 +75,19 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   String? selectedLevel;
   String? selectedSubject;
   String? selectedPreference;
+
+  File? _image;
+
+  Future getImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image == null) return;
+
+    final imageTemporary = File(image.path);
+
+    setState(() {
+      _image = imageTemporary;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,20 +129,42 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 Expanded(
                     child: ElevatedButton(
                         onPressed: details.onStepCancel,
-                        child: const Text("Back")
-                    )
-                ),
-
+                        child: const Text("Back"))),
               const SizedBox(width: 12),
-
+              if (!isLastStep)
                 Expanded(
                     child: ElevatedButton(
                         onPressed: details.onStepContinue,
-                        child: Text(isLastStep ? 'Submit' : 'Next'))
-                ),
+                        child: const Text('Next'))),
+              if (isLastStep)
+                Expanded(
+                    child: ElevatedButton(
+                        onPressed: () {
+                          final title = _title.text;
+                          final description = _description.text;
+
+                          createQuestion(
+                              title: title, description: description);
+                        },
+                        child: const Text('Submit'))),
             ],
           );
         });
+  }
+
+  Future createQuestion(
+      {required String title, required String description}) async {
+    // reference to document
+    final docQuestion =
+        FirebaseFirestore.instance.collection('questions').doc();
+
+    // create data using the reference
+    final question =
+        Question(id: docQuestion.id, title: title, description: description);
+    final json = question.toJson();
+
+    // create document and write daya to Firebase
+    await docQuestion.set(json);
   }
 
   List<Step> getSteps() => [
@@ -130,9 +177,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           content: Column(
             children: <Widget>[
               const SizedBox(height: 20),
-
               TextFormField(
-                controller: title,
+                controller: _title,
                 keyboardType: TextInputType.multiline,
                 minLines: 1,
                 maxLines: 2,
@@ -147,13 +193,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   )),
                 ),
               ),
-
               const SizedBox(height: 70),
-
               TextFormField(
-                controller: description,
+                controller: _description,
                 keyboardType: TextInputType.multiline,
-                minLines: 5,
+                minLines: 4,
                 maxLines: 5,
                 decoration: const InputDecoration(
                   labelText: 'Description',
@@ -163,16 +207,44 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                       borderRadius: BorderRadius.all(Radius.circular(15))),
                 ),
               ),
-
               const SizedBox(height: 50),
-
-              // const Text('Photo'),
-
-              // Container(
-              //   decoration: BoxDecoration(
-              //     border: Border.all(color: Colors.grey)
-              //   ),
-              // ),
+              DottedBorder(
+                color: Colors.grey,
+                borderType: BorderType.RRect,
+                radius: const Radius.circular(15),
+                dashPattern: const [2, 5],
+                strokeWidth: 2,
+                strokeCap: StrokeCap.round,
+                child: SizedBox(
+                  height: 125,
+                  width: 400,
+                  child: GestureDetector(
+                    onTap: () => getImage(),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        _image != null
+                            ? Image.file(
+                                _image!,
+                                width: 50,
+                                height: 50,
+                              )
+                            : const Image(
+                                image: AssetImage('assets/uploadImage.png'),
+                                height: 50,
+                              ),
+                        const Text(
+                          'Upload Image',
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 40),
             ],
           ),
         ),
@@ -230,7 +302,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 value: selectedSubject,
 
                 icon: const Icon(Icons.keyboard_arrow_down),
-                menuMaxHeight: 200.0,   // use to limit the number of menu item shown
+                menuMaxHeight:
+                    200.0, // use to limit the number of menu item shown
 
                 // list of items
                 items: questionSubject.map((String subject) {
@@ -281,4 +354,23 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           ]),
         ),
       ];
+}
+
+// question model object
+class Question {
+  String id;
+  final String title;
+  final String description;
+
+  Question({
+    this.id = '',
+    required this.title,
+    required this.description,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'description': description,
+      };
 }
