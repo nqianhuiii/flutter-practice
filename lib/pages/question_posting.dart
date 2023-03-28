@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learnit_app/components/resource_card.dart';
+import 'package:go_router/go_router.dart';
+import 'package:learnit_app/components/post_card.dart';
 import 'package:learnit_app/models/question_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -35,7 +36,7 @@ class _QuestionPostingState extends State<QuestionPosting> {
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/post_question');
+          GoRouter.of(context).go("/post_question");
         },
         elevation: 0,
         backgroundColor: Colors.deepPurpleAccent[100],
@@ -46,12 +47,7 @@ class _QuestionPostingState extends State<QuestionPosting> {
     );
   }
 
-  // Widget buildQuestionCard(Question question) => ListTile(
-  //       title: Text(question.title),
-
-  //     );
-
-  Widget buildQuestionCard(Question question) => ResourcesCard(
+  Widget buildQuestionCard(Question question) => PostCard(
         title: question.title,
         description: question.description,
       );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:learnit_app/components/question_stepper.dart';
 
 class PostQuestion extends StatelessWidget {
@@ -15,7 +16,8 @@ class PostQuestion extends StatelessWidget {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_sharp, color: Colors.black),
               onPressed: () {
-                Navigator.pushNamed(context, '/');
+                // Navigator.pushNamed(context, '/');
+                GoRouter.of(context).go('/');
               },
             ),
             title: const Text(_title, style: TextStyle(color: Colors.black)),

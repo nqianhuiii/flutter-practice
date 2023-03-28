@@ -38,12 +38,7 @@ class _HomeState extends State<Home> {
           body: const QuestionPosting(),
         ));
   }
-
-  // Widget buildQuestionCard(Question question) => ListTile(
-  //       title: Text(question.title),
-  //       subtitle: Text(question.description),
-  //     );
-
+  
   Widget buildQuestionCard(Question question) => Card(
         child: ListTile(
           title: Text(question.title),

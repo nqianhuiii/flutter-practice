@@ -47,7 +47,7 @@ dependencies:
   firebase_storage: ^11.0.16
 
   size_config: ^2.0.3
-  # go_router: ^6.5.0
+  go_router: ^6.5.0
 
 dev_dependencies:
   flutter_test:

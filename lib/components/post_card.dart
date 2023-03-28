@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-class ResourcesCard extends StatelessWidget {
-  const ResourcesCard(
-      {super.key, required this.title, required this.description});
+class PostCard extends StatefulWidget {
+  const PostCard({super.key, required this.title, required this.description});
 
   final String title;
   final String description;
 
+  @override
+  State<PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         const SizedBox(height: 15),
         GestureDetector(
-          onTap: () {
-            Navigator.of(context).pushNamed('/detailed_post');
+          onTap: () {            
+            GoRouter.of(context)
+                .go('/detailed_post/${widget.title}/${widget.description}');
           },
           child: Container(
             width: 340,
@@ -57,22 +63,22 @@ class ResourcesCard extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 3, 0, 0),
+                        padding: const EdgeInsets.fromLTRB(0, 2, 8, 0),
                         child: Text(
-                          title,
+                          widget.title,
                           style: const TextStyle(fontSize: 18),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+                        padding: const EdgeInsets.fromLTRB(0, 4, 8, 2),
                         child: Text(
-                          description,
+                          widget.description,
                           style: TextStyle(
-                              color: Colors.grey.shade600, fontSize: 15),
+                              color: Colors.grey.shade600, fontSize: 13),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+                        padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
                         child: Row(
                           children: <Widget>[
                             Row(
