@@ -17,7 +17,7 @@ class PostQuestion extends StatelessWidget {
               icon: const Icon(Icons.arrow_back_sharp, color: Colors.black),
               onPressed: () {
                 // Navigator.pushNamed(context, '/');
-                GoRouter.of(context).go('/');
+                GoRouter.of(context).go('/forum');
               },
             ),
             title: const Text(_title, style: TextStyle(color: Colors.black)),

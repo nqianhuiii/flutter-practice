@@ -1,7 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class CommentBox extends StatelessWidget {
+class CommentBox extends StatefulWidget {
   const CommentBox({super.key});
+
+  @override
+  State<CommentBox> createState() => _CommentBoxState();
+}
+
+class _CommentBoxState extends State<CommentBox> {
+  final _comments = TextEditingController();
+
+  Future<void> addComment(String questionId) async {
+    final commentRef = FirebaseFirestore.instance
+        .collection('questions')
+        .doc(questionId)
+        .collection('comments')
+        .doc();
+
+    // Add the comment data to Firestore
+    await commentRef.set({
+      // 'comment': comment,
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +36,7 @@ class CommentBox extends StatelessWidget {
             child: SizedBox(
               width: 340, // set the width here
               child: Container(
-                  decoration: BoxDecoration(
+                decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
@@ -28,6 +49,7 @@ class CommentBox extends StatelessWidget {
                   ],
                 ),
                 child: TextFormField(
+                    controller: _comments,
                     decoration: InputDecoration(
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         hintText: 'Add a comment...',
@@ -35,7 +57,11 @@ class CommentBox extends StatelessWidget {
                         focusedBorder: InputBorder.none,
                         prefixIcon: IconButton(
                           icon: const Icon(Icons.attach_file),
-                          onPressed: () {},
+                          onPressed: () {
+                            // final comments = _comments.text;
+
+                            // createComment(comments: comments);
+                          },
                         ),
                         suffixIcon: Container(
                             height: 10,
@@ -61,4 +87,8 @@ class CommentBox extends StatelessWidget {
       ],
     ));
   }
+
+  // Future createComment({required String comment}) async{
+
+  // }
 }

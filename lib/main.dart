@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learnit_app/home.dart';
+import 'package:learnit_app/pages/forum.dart';
 import 'package:learnit_app/pages/detailed_posting.dart';
+import 'package:learnit_app/pages/home.dart';
 import 'package:learnit_app/pages/post_question.dart';
 
 Future main() async {
@@ -18,6 +19,10 @@ final GoRouter _router = GoRouter(routes: [
   GoRoute(
     path: "/",
     builder: (context, state) => const Home(),
+  ),
+  GoRoute(
+    path: "/forum",
+    builder: (context, state) => const Forum(),
   ),
   GoRoute(
     path: "/post_question",

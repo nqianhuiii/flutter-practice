@@ -37,7 +37,7 @@ class _DetailedPostState extends State<DetailedPost> {
                 color: Colors.black,
               ),
               onPressed: (() {
-                GoRouter.of(context).go('/');
+                GoRouter.of(context).go('/forum');
               }),
             ),
           ),
@@ -139,7 +139,7 @@ class _DetailedPostState extends State<DetailedPost> {
           child: Align(
             alignment: Alignment.topLeft,
             child: Text(
-              "Discussions",
+              "Discussion",
               style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
