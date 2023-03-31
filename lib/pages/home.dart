@@ -15,7 +15,9 @@ class Home extends StatelessWidget {
       body: Column(
         children: [
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+             GoRouter.of(context).go('/post_resources');
+            },
             child: Container(
               height: 100,
               width: double.infinity,

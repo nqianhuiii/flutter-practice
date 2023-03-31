@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:learnit_app/models/comments_likes_modal.dart';
+import 'package:learnit_app/models/question_model.dart';
 
 class CommentBox extends StatefulWidget {
   const CommentBox({super.key});
@@ -57,11 +59,7 @@ class _CommentBoxState extends State<CommentBox> {
                         focusedBorder: InputBorder.none,
                         prefixIcon: IconButton(
                           icon: const Icon(Icons.attach_file),
-                          onPressed: () {
-                            // final comments = _comments.text;
-
-                            // createComment(comments: comments);
-                          },
+                          onPressed: () {},
                         ),
                         suffixIcon: Container(
                             height: 10,
@@ -74,7 +72,13 @@ class _CommentBoxState extends State<CommentBox> {
                             child: Center(
                               child: IconButton(
                                 icon: const Icon(Icons.arrow_upward),
-                                onPressed: () {},
+                                onPressed: () async {
+                                  final comment = _comments.text;
+                                  final questionID = await readQuestionIds();
+                                  await createComment(
+                                      questionID: questionID[0],
+                                      comment: comment);
+                                },
                                 color: Colors.white,
                               ),
                             ))
@@ -88,7 +92,32 @@ class _CommentBoxState extends State<CommentBox> {
     ));
   }
 
-  // Future createComment({required String comment}) async{
+  Future<List<String>> readQuestionIds() async {
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('questions').get();
 
-  // }
+    final ids = querySnapshot.docs.map((doc) => doc.id).toList();
+    return ids;
+  }
+
+  Future createComment(
+      {required String questionID,
+      required String comment}) async {
+    // final postId = questionIds.first;
+    final docComment = FirebaseFirestore.instance
+        .collection('questions')
+        .doc(questionID)
+        .collection('comments')
+        .doc();
+
+    // create data using the reference
+    final commentPost = Comment(
+      id: docComment.id,
+      comment: comment,
+    );
+    final json = commentPost.toJson();
+
+    // create document and write daya to Firebase
+    await docComment.set(json);
+  }
 }

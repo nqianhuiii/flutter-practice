@@ -44,8 +44,7 @@ class _DetailedPostState extends State<DetailedPost> {
           body: Column(
             children: [
               const SizedBox(height: 15),
-              Expanded(
-                child: Container(
+                Container(
                   width: 340,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -129,8 +128,7 @@ class _DetailedPostState extends State<DetailedPost> {
                 ),
               ],
             ),
-          )
-        ),
+          ),
         // comment section
         const SizedBox(height: 15),
         

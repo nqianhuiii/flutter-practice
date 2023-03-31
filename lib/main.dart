@@ -5,6 +5,7 @@ import 'package:learnit_app/pages/forum.dart';
 import 'package:learnit_app/pages/detailed_posting.dart';
 import 'package:learnit_app/pages/home.dart';
 import 'package:learnit_app/pages/post_question.dart';
+import 'package:learnit_app/pages/post_resources.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,5 +36,9 @@ final GoRouter _router = GoRouter(routes: [
       questionDescription: state.params['description']!,
       ),
     ),
+    GoRoute(
+    path: "/post_resources",
+    builder: (context, state) => const PostResources(),
+  ),
 ]
 );
