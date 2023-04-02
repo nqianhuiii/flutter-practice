@@ -24,7 +24,7 @@ class _PostCardState extends State<PostCard> {
           },
           child: Container(
             width: 340,
-            height: 120,
+            height: 150,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
@@ -49,7 +49,8 @@ class _PostCardState extends State<PostCard> {
                   ),
                 ),
                 const SizedBox(width: 20),
-                Expanded(
+                Flexible(
+                  fit: FlexFit.tight,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,

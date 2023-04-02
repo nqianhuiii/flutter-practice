@@ -3,7 +3,6 @@ class Comment {
   String id;
   final String comment;
 
-
   Comment({
     this.id = '',
     required this.comment,
@@ -14,11 +13,7 @@ class Comment {
         'comment': comment,
       };
 
-  // static Question fromJson(Map<String, dynamic> json) =>
-  //     Question(
-  //       title: json['title'], 
-  //       description: json['description'],
-  //       questionLevel: json['questionLevel'], 
-  //       questionSubject: json['questionSubject'], 
-  //       solvingPreference: json['solvingPreference']);
+  static Comment fromJson(Map<String, dynamic> json) => Comment(
+        comment: json['comment'],
+      );
 }
