@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:learnit_app/models/comments_likes_modal.dart';
-import 'package:learnit_app/models/question_model.dart';
 
 class CommentBox extends StatefulWidget {
-  const CommentBox({super.key});
+  final String questionId;
+  const CommentBox({super.key, required this.questionId});
 
   @override
   State<CommentBox> createState() => _CommentBoxState();
@@ -74,9 +74,9 @@ class _CommentBoxState extends State<CommentBox> {
                                 icon: const Icon(Icons.arrow_upward),
                                 onPressed: () async {
                                   final comment = _comments.text;
-                                  final questionID = await readQuestionIds();
+                                  final questionID = widget.questionId;
                                   await createComment(
-                                      questionID: questionID[0],
+                                      questionID: questionID,
                                       comment: comment);
                                 },
                                 color: Colors.white,
@@ -101,8 +101,7 @@ class _CommentBoxState extends State<CommentBox> {
   }
 
   Future createComment(
-      {required String questionID,
-      required String comment}) async {
+      {required String questionID, required String comment}) async {
     // final postId = questionIds.first;
     final docComment = FirebaseFirestore.instance
         .collection('questions')

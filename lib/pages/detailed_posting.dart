@@ -3,11 +3,13 @@ import 'package:go_router/go_router.dart';
 import 'package:learnit_app/components/comment_box.dart';
 
 class DetailedPost extends StatefulWidget {
+  final String questionId;
   final String questionTitle;
   final String questionDescription;
 
   const DetailedPost(
       {super.key,
+      required this.questionId,
       required this.questionTitle,
       required this.questionDescription});
 
@@ -145,7 +147,7 @@ class _DetailedPostState extends State<DetailedPost> {
             ),
           ),
         ),
-        const CommentBox(),
+        CommentBox(questionId: widget.questionId),
        ]
       )
     )

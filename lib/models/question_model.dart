@@ -27,6 +27,7 @@ class Question {
 
   static Question fromJson(Map<String, dynamic> json) =>
       Question(
+        id: json['id'], 
         title: json['title'], 
         description: json['description'],
         questionLevel: json['questionLevel'], 

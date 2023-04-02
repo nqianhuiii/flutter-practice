@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class PostCard extends StatefulWidget {
-  const PostCard({super.key, required this.title, required this.description});
-
+  const PostCard({super.key, required this.id, required this.title, required this.description});
+  final String id;
   final String title;
   final String description;
 
@@ -20,7 +20,7 @@ class _PostCardState extends State<PostCard> {
         GestureDetector(
           onTap: () {            
             GoRouter.of(context)
-                .go('/detailed_post/${widget.title}/${widget.description}');
+                .go('/detailed_post/${widget.id}/${widget.title}/${widget.description}');
           },
           child: Container(
             width: 340,

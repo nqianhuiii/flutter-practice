@@ -30,8 +30,9 @@ final GoRouter _router = GoRouter(routes: [
     builder: (context, state) => const PostQuestion(),
   ),
   GoRoute(
-    path: "/detailed_post/:title/:description",
+    path: "/detailed_post/:id/:title/:description",
     builder: (context, state) => DetailedPost(
+      questionId: state.params['id']!,
       questionTitle: state.params['title']!,
       questionDescription: state.params['description']!,
       ),

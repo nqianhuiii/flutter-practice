@@ -48,6 +48,7 @@ class _QuestionPostingState extends State<QuestionPosting> {
   }
 
   Widget buildQuestionCard(Question question) => PostCard(
+        id: question.id,
         title: question.title,
         description: question.description,
       );
