@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learnit_app/state/like_state.dart';
 
 class PostCard extends StatefulWidget {
   const PostCard({super.key, required this.id, required this.title, required this.description});
@@ -82,14 +83,15 @@ class _PostCardState extends State<PostCard> {
                         padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
                         child: Row(
                           children: <Widget>[
-                            Row(
-                              children: const [
-                                Icon(Icons.favorite_border_outlined, size: 15),
-                                SizedBox(width: 5),
-                                // Text("${likes} Likes"),
-                                Text("500 Likes"),
-                              ],
-                            ),
+                            // Row(
+                              // children: const [
+                              //   Icon(Icons.favorite_border_outlined, size: 15),
+                              //   SizedBox(width: 5),
+                              //   // Text("${likes} Likes"),
+                              //   Text("500 Likes"),
+                              // ],
+                              const LikeButton(),
+                            // ),
                             const SizedBox(width: 40),
                             Row(
                               children: const [
