@@ -24,8 +24,11 @@ class _PostCardState extends State<PostCard> {
                 .go('/detailed_post/${widget.id}/${widget.title}/${widget.description}');
           },
           child: Container(
+            constraints: const BoxConstraints(
+              minHeight: 100,
+              maxHeight: double.infinity,
+            ),
             width: 340,
-            height: 150,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
@@ -79,19 +82,12 @@ class _PostCardState extends State<PostCard> {
                               color: Colors.grey.shade600, fontSize: 13),
                         ),
                       ),
+                      const SizedBox(height: 6),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
                         child: Row(
                           children: <Widget>[
-                            // Row(
-                              // children: const [
-                              //   Icon(Icons.favorite_border_outlined, size: 15),
-                              //   SizedBox(width: 5),
-                              //   // Text("${likes} Likes"),
-                              //   Text("500 Likes"),
-                              // ],
-                              const LikeButton(),
-                            // ),
+                            const LikeButton(),
                             const SizedBox(width: 40),
                             Row(
                               children: const [
@@ -103,6 +99,7 @@ class _PostCardState extends State<PostCard> {
                           ],
                         ),
                       ),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),

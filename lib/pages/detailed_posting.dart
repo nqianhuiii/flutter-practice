@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:learnit_app/components/comment_box.dart';
 import 'package:learnit_app/components/comment_card.dart';
 import 'package:learnit_app/models/comments_likes_modal.dart';
+import 'package:learnit_app/state/like_state.dart';
 
 class DetailedPost extends StatefulWidget {
   final String questionId;
@@ -49,6 +50,10 @@ class _DetailedPostState extends State<DetailedPost> {
             body: Column(children: [
               const SizedBox(height: 15),
               Container(
+                constraints: const BoxConstraints(
+                  minHeight: 100,
+                  maxHeight: double.infinity,
+                ),
                 width: 340,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -104,17 +109,14 @@ class _DetailedPostState extends State<DetailedPost> {
                                   color: Colors.grey.shade600, fontSize: 13),
                             ),
                           ),
+                          const SizedBox(height: 6),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
                             child: Row(
                               children: <Widget>[
                                 Row(
                                   children: const [
-                                    Icon(Icons.favorite_border_outlined,
-                                        size: 15),
-                                    SizedBox(width: 5),
-                                    // Text("${likes} Likes"),
-                                    Text("500 Likes"),
+                                    LikeButton(),
                                   ],
                                 ),
                                 const SizedBox(width: 40),
@@ -126,12 +128,11 @@ class _DetailedPostState extends State<DetailedPost> {
                                     Text("15 discussions"),
                                   ],
                                 ),
+                                const SizedBox(height: 10),
                               ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 12,
-                          )
+                          const SizedBox(height: 12),
                         ],
                       ),
                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learnit_app/state/like_state.dart';
 
 class CommentCard extends StatefulWidget {
   final String comment;
@@ -14,8 +15,11 @@ class _CommentCardState extends State<CommentCard> {
     return Column(
       children: [
         Container(
+          constraints: const BoxConstraints(
+            minHeight: 70,
+            maxHeight: double.infinity,
+          ),
           width: 340,
-          height: 120,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
@@ -57,19 +61,18 @@ class _CommentCardState extends State<CommentCard> {
                       padding: const EdgeInsets.fromLTRB(0, 2, 8, 0),
                       child: Text(
                         widget.comment,
-                        style: const TextStyle(fontSize: 18),
+                        style: TextStyle(
+                          color: Colors.grey.shade800, fontSize: 15),
                       ),
                     ),
+                    const SizedBox(height: 6),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
                       child: Row(
                         children: <Widget>[
                           Row(
                             children: const [
-                              Icon(Icons.favorite_border_outlined, size: 15),
-                              SizedBox(width: 5),
-                              // Text("${likes} Likes"),
-                              Text("500 Likes"),
+                              LikeButton(),
                             ],
                           ),
                           const SizedBox(width: 40),
@@ -83,13 +86,14 @@ class _CommentCardState extends State<CommentCard> {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 10),
                   ],
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 14),
       ],
     );
   }
