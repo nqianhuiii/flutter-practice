@@ -4,7 +4,8 @@ import 'package:learnit_app/models/comments_likes_modal.dart';
 
 class CommentBox extends StatefulWidget {
   final String questionId;
-  const CommentBox({super.key, required this.questionId});
+  const CommentBox(
+      {super.key, required this.questionId, required Future<int> numComments});
 
   @override
   State<CommentBox> createState() => _CommentBoxState();
@@ -62,6 +63,8 @@ class _CommentBoxState extends State<CommentBox> {
                                 final questionID = widget.questionId;
                                 await createComment(
                                     questionID: questionID, comment: comment);
+                                // clear the textarea
+                                _comments.clear();
                               },
                               color: Colors.white,
                             ),
@@ -75,22 +78,16 @@ class _CommentBoxState extends State<CommentBox> {
     ]);
   }
 
-  Future<List<String>> readQuestionIds() async {
-    final querySnapshot =
-        await FirebaseFirestore.instance.collection('questions').get();
-
-    final ids = querySnapshot.docs.map((doc) => doc.id).toList();
-    return ids;
-  }
-
+  // create and post comment to firebase
   Future createComment(
       {required String questionID, required String comment}) async {
-    // final postId = questionIds.first;
     final docComment = FirebaseFirestore.instance
         .collection('questions')
         .doc(questionID)
         .collection('comments')
         .doc();
+
+ 
 
     // create data using the reference
     final commentPost = Comment(
@@ -102,4 +99,14 @@ class _CommentBoxState extends State<CommentBox> {
     // create document and write daya to Firebase
     await docComment.set(json);
   }
+
+  // read from firebase
+  Future<List<String>> readQuestionIds() async {
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('questions').get();
+
+    final ids = querySnapshot.docs.map((doc) => doc.id).toList();
+    return ids;
+  }
+
 }

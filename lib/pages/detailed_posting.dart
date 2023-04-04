@@ -180,7 +180,7 @@ class _DetailedPostState extends State<DetailedPost> {
                     }),
               ),
 
-              CommentBox(questionId: widget.questionId),
+              CommentBox(questionId: widget.questionId, numComments: getCommentCount(widget.questionId)),
 
 
             ])));
@@ -198,3 +198,14 @@ class _DetailedPostState extends State<DetailedPost> {
       .map((snapshot) =>
           snapshot.docs.map((doc) => Comment.fromJson(doc.data())).toList());
 }
+
+    Future<int> getCommentCount(String questionID) async {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('questions')
+          .doc(questionID)
+          .collection('comments')
+          .get();
+      
+      final commentCount = querySnapshot.docs.length;
+      return commentCount;
+    }
